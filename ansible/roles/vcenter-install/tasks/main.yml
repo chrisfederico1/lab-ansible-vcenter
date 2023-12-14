@@ -1,0 +1,48 @@
+---
+# tasks file for vcenter_common
+- name: deploy vcenter
+  community.vmware.vmware_deploy_ovf:
+    hostname: '{{ esxi_address }}'
+    username: '{{ esxi_username }}'
+    password: '{{ esxi_password }}'
+    name: '{{ vcenter_hostname }}' # shortname, not FQDN
+    datastore: "datastore1"
+    disk_provisioning: "thin"
+    networks:
+        "Network 1": "VM Network"
+    ovf: '{{ vcsa_ova_file }}' 
+    wait_for_ip_address: true
+    validate_certs: no
+    inject_ovf_env: true
+    properties:
+      DeploymentOption.value: '{{ vcsa_size }}' # vCenter t-shirt size: tiny,small,medium,large, or infrastructure 
+      guestinfo.cis.appliance.net.addr.family: 'ipv4' # ipv4 or ipv6
+      guestinfo.cis.appliance.net.mode: 'static' # static or dhcp
+      guestinfo.cis.appliance.net.addr: '{{ vcenter_address }}' 
+      guestinfo.cis.appliance.net.pnid: "{{ vcenter_hostname }}.{{ domain }}" # FQDN of vcenter server
+      guestinfo.cis.appliance.net.prefix: '{{ net_prefix }}' # netmask length, CIDR notation, i.e. '24'
+      guestinfo.cis.appliance.net.gateway: '{{ net_gateway }}' 
+      guestinfo.cis.appliance.net.dns.servers: '{{ dns_servers }}' # Comma separated list of IP addresses of DNS servers.
+      guestinfo.cis.appliance.root.passwd: '{{ vcenter_password }}' 
+      guestinfo.cis.appliance.ssh.enabled: "true"
+      guestinfo.cis.appliance.ntp.servers: '{{ ntp_server1 }}'
+      guestinfo.cis.ceip_enabled: "False"
+      guestinfo.cis.deployment.autoconfig: 'True' # Auto-configure after deployment
+      guestinfo.cis.vmdir.password: '{{ vcenter_password }}' # SSO Password for administrator@vsphere.local
+      guestinfo.cis.upgrade.import.directory.userConfigurable: 'True'
+      guestinfo.cis.upgrade.import.directory: '/storage/seat/cis-export-folder'
+      guestinfo.cis.vmdir.first-instance: 'True'
+      domain: '{{ domain }}'
+      searchpath: '{{ searchpath }}'
+  delegate_to: localhost
+- name: Wait for vCenter
+  community.vmware.vmware_about_info:
+    hostname: '{{ vcenter_address }}'
+    username: 'administrator@vsphere.local'
+    password: '{{ vcenter_password }}'
+    validate_certs: no
+  delegate_to: localhost
+  retries: 20
+  delay: 60
+  register: result           
+  until: result is succeeded 

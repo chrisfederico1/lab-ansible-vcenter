@@ -1,0 +1,17 @@
+---
+# defaults file for vcenter_common
+
+esxi_address: '192.168.1.222'
+esxi_username: 'root'
+esxi_password: 'Welcome1!'
+vcenter_password: 'Welcome1!'
+vcenter_hostname: 'labvcsa8'
+vcenter_address: '192.168.1.240'
+net_prefix: '24'
+net_gateway: '192.168.1.1'
+dns_servers: '192.168.1.230'
+ntp_server1: ''
+domain: 'chrislab.local'
+searchpath: "chrislab.local"
+vcsa_size: 'tiny'
+vcsa_ova_file: '/ansible/vcenter_images/vcsa8.ova'
