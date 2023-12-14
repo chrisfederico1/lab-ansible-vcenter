@@ -14,4 +14,4 @@ ntp_server1: ''
 domain: 'chrislab.local'
 searchpath: "chrislab.local"
 vcsa_size: 'tiny'
-vcsa_ova_file: '/ansible/vcenter_images/vcsa8.ova'
+vcsa_ova_file: '/ansible/images/vcsa8.ova'
