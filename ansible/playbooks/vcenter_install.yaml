@@ -1,8 +1,8 @@
 # code: Language=ansible
 ---
-- name: vCenter Commone Role
+- name: vCenter Install Role
   hosts: localhost
   gather_facts: false
 
   roles:
-    - role: vcenter_common
+    - role: vcenter-install
