@@ -1,0 +1,8 @@
+# code: Language=ansible
+---
+- name: vCenter Commone Role
+  hosts: localhost
+  gather_facts: false
+
+  roles:
+    - role: vcenter_common
